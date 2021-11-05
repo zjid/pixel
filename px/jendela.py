@@ -1,7 +1,7 @@
 import cv2
 
 def skala(nama, tinggilebar = []):
-  '''Define tinggilebar [h,w] or leave it for fullscreen.'''
+  '''Define tinggilebar [h,w] or leave it for fullscreen 1920x1080.'''
   cv2.namedWindow(nama, cv2.WINDOW_NORMAL)
   if tinggilebar:
     cv2.resizeWindow(nama, tinggilebar[1], tinggilebar[0])
