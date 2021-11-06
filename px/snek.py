@@ -28,8 +28,8 @@ class arena:
     self.isi_tembok = []
     self.isi = self.isi_kodok + self.isi_ular + self.isi_tembok
     self.densitas = len(self.isi) / self.luas
-    self.map_kodok = zeros([self.tinggi, self.lebar], bool)
-    for [y, x] in self.isi_kodok: self.map_kodok[y, x] = True
+    # self.map_kodok = zeros([self.tinggi, self.lebar], bool)
+    # for [y, x] in self.isi_kodok: self.map_kodok[y, x] = True
     # self.map_ular = zeros([self.tinggi, self.lebar], bool)
 
   def update(self):
@@ -100,10 +100,12 @@ class ular:
     self.warna_kepala = warna[choice(list(warna.keys()))] + randint(27, size=3)
     self.warna_kepala = uint8(clip(self.warna_kepala, 0, 227))
     self.warna_badan = [ self._catbadan() ]
-    self.gerak = True
+    self.gerakkah = True
     self.skor = 0
+    self.jalan = None
+    self.arah = None
 
-  def update(self):
+  def cek(self):
     '''Check if the snake is eating or dead.'''
     # If the snake is eating
     for i, dok in daftar_kodok.items():
@@ -111,6 +113,23 @@ class ular:
         self.skor += dok.nutrisi
         self.tubuh.insert(0, self.kepala)
         self.warna_badan.insert(0, self._catbadan())
+        daftar_kodok.pop(i)
+    # If the snake is dead
+    if any(
+      self.kepala in field.isi_ular,
+      self.kepala in field.isi_tembok,
+      not field.dalamkah(self.kepala)
+    ):
+      self.gerakkah = False
+
+  def _gerak(self, arah):
+    [y, x] = self.kepala
+    if arah == 'atas': self.tubuh.insert(0, [y-1, x])
+    elif arah == 'bawah': self.tubuh.insert(0, [y+1, x])
+    elif arah == 'kiri': self.tubuh.insert(0, [y, x-1])
+    elif arah == 'kanan': self.tubuh.insert(0, [y, x+1])
+    self.tubuh.pop()
+    self.jalan = arah
 
   def _catbadan(self):
     '''Bodypaint the snake neck, body, and tail.'''
