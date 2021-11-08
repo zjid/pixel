@@ -1,7 +1,7 @@
 import cv2
 from domestik import px
 
-sawah = px.snek.field = px.snek.arena(90, 160)
+sawah = px.snek.field = px.snek.arena(900, 1600)
 judul = 'ular oop'
 px.jendela.skala(judul, geser=[0, 1920])
 cv2.imshow(judul, sawah.arena)
@@ -13,7 +13,10 @@ px.snek.ternak_kodok(3)
 sawah.update()
 
 while True:
-  t = max(1, 100 - mc.skor)
+  skor_lawan = sum([lar.skor for lar in px.snek.daftar_ular.values()]) - mc.skor
+  ada_lawan = sum([lar.hidup for lar in px.snek.daftar_ular.values()]) - 1
+
+  t = max(1, 100 - max(mc.skor, skor_lawan))
   k = cv2.waitKey(t)
   if k == ord('q'): break
 
@@ -21,9 +24,6 @@ while True:
     px.snek.ternak_kodok(2, 2)
     px.snek.ternak_kodok(2, 1)
     px.snek.ternak_kodok(2)
-
-  skor_lawan = sum([lar.skor for lar in px.snek.daftar_ular.values()]) - mc.skor
-  ada_lawan = sum([lar.hidup for lar in px.snek.daftar_ular.values()]) - 1
 
   if ada_lawan < 1:
     px.snek.ternak_ular(2, 2)
@@ -37,7 +37,7 @@ while True:
   # print(lawan.hidup, lawan.arah, lawan.kepala)
   sawah.update()
 
-print(f'Skor kamu {mc.skor}')
+print(f'Skor kamu {mc.skor} / skor lawan {skor_lawan}')
 cv2.waitKey()
 cv2.destroyAllWindows()
 

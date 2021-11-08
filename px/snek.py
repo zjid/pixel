@@ -114,7 +114,6 @@ class ular:
           break
       if not dapat:
         print('[W] Failed to put a new snake.')
-        return 0
     self.id = self.__repr__().split('object at ')[-1].replace('>','')
     daftar_ular.update({self.id: self})
     self.tubuh = [self.kepala, self.kepala]
