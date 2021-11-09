@@ -184,15 +184,21 @@ class ular:
     '''Dizzy snake.'''
     self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
 
-  def _k_lapar(self, tombol = None):
-    '''Rush to the closest frog.'''
-    if field.isi_kodok and not self.mogok:
+  def _mangsa_terdekat(self):
+    '''Determine location and distance of the closest prey.'''
+    if field.isi_kodok:
       jarak_yx = array(field.isi_kodok) - array(self.kepala)
       jarak_abs = abs(jarak_yx)
       jarak = [dy + dx for [dy, dx] in jarak_abs]
       urut = list(zip(jarak, range(len(jarak))))
       urut.sort()
-      terdekat = jarak_yx[urut[0][1]]
+      return field.isi_kodok[urut[0][1]], jarak_yx[urut[0][1]]
+    else: return [0, 0], - array(self.kepala)
+
+  def _k_lapar(self, tombol = None):
+    '''Rush to the closest frog.'''
+    if not self.mogok:
+      (lokasi, terdekat) = self._mangsa_terdekat()
       if abs(terdekat[0]) > abs(terdekat[1]):
         if terdekat[0] < 0: self._gerak('atas')
         else: self._gerak('bawah')
@@ -202,6 +208,29 @@ class ular:
     else:
       self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
       self.mogok = False
+
+  def _k_nembok(self, tombol = None):
+    '''Enjoy the humid obstacles.'''
+    # if not self.mogok:
+    #   (lokasi, terdekat) = self._mangsa_terdekat()
+    #   if abs(terdekat[0]) > abs(terdekat[1]):
+    #     if terdekat[0] < 0: self._gerak('atas')
+    #     else: self._gerak('bawah')
+    #   else:
+    #     if terdekat[1] < 0: self._gerak('kiri')
+    #     else: self._gerak('kanan')
+    # else:
+    #   self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
+    #   self.mogok = False
+
+  def _k_kelit(self, tombol = None):
+    '''Quite smart snake avoid obstacles to the closest frog.'''
+    # if field.isi_kodok and not self.mogok:
+    #   jarak_yx = array(field.isi_kodok) - array(self.kepala)
+    #   jarak_abs = abs(jarak_yx)
+    #   # jarak = [dy + dx ]
+    # else:
+    #   pass
 
   def _diam(self, tombol = None): pass
 

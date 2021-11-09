@@ -1,7 +1,7 @@
 import cv2
 from domestik import px
 
-sawah = px.snek.field = px.snek.arena(900, 1600)
+sawah = px.snek.field = px.snek.arena(180, 320)
 judul = 'ular oop'
 px.jendela.skala(judul, geser=[0, 1920])
 cv2.imshow(judul, sawah.arena)
@@ -17,7 +17,7 @@ while True:
   ada_lawan = sum([lar.hidup for lar in px.snek.daftar_ular.values()]) - 1
 
   t = max(1, 100 - max(mc.skor, skor_lawan))
-  k = cv2.waitKey(t)
+  k = cv2.waitKey(1)
   if k == ord('q'): break
 
   if not sawah.isi_kodok:
@@ -26,8 +26,8 @@ while True:
     px.snek.ternak_kodok(2)
 
   if ada_lawan < 1:
-    px.snek.ternak_ular(2, 2)
-    px.snek.ternak_ular(3)
+    px.snek.ternak_ular(5, 2)
+    # px.snek.ternak_ular(3)
 
   cv2.imshow(judul, sawah.next)
   cv2.displayStatusBar(judul, f'skor kamu / skor lawan = {mc.skor} / {skor_lawan}')
