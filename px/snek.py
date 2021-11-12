@@ -211,17 +211,17 @@ class ular:
 
   def _k_nembok(self, tombol = None):
     '''Enjoy the humid obstacles.'''
-    # if not self.mogok:
-    #   (lokasi, terdekat) = self._mangsa_terdekat()
-    #   if abs(terdekat[0]) > abs(terdekat[1]):
-    #     if terdekat[0] < 0: self._gerak('atas')
-    #     else: self._gerak('bawah')
-    #   else:
-    #     if terdekat[1] < 0: self._gerak('kiri')
-    #     else: self._gerak('kanan')
-    # else:
-    #   self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
-    #   self.mogok = False
+    if not self.mogok:
+      (lokasi, terdekat) = self._mangsa_terdekat()
+      if abs(terdekat[0]) > abs(terdekat[1]):
+        if terdekat[0] < 0: self._gerak('atas')
+        else: self._gerak('bawah')
+      else:
+        if terdekat[1] < 0: self._gerak('kiri')
+        else: self._gerak('kanan')
+    else:
+      self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
+      self.mogok = False
 
   def _k_kelit(self, tombol = None):
     '''Quite smart snake avoid obstacles to the closest frog.'''
