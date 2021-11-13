@@ -10,6 +10,9 @@ field = None
 daftar_kodok = {}
 daftar_ular = {}
 
+# 4 directions.
+arah = ['atas', 'bawah', 'kiri', 'kanan']
+
 class arena:
 
   def __init__(self, tinggi, lebar):
@@ -37,7 +40,8 @@ class arena:
       try: self.next[y, x] = lar.warna_kepala
       except: pass
     self.isi_tembok = []
-    self.isi = self.isi_kodok + self.isi_ular + self.isi_tembok
+    self.isi_halangan = self.isi_ular + self.isi_tembok
+    self.isi = self.isi_kodok + self.isi_halangan
     self.densitas = len(self.isi) / self.luas
     # self.map_kodok = zeros([self.tinggi, self.lebar], bool)
     # for [y, x] in self.isi_kodok: self.map_kodok[y, x] = True
@@ -123,7 +127,7 @@ class ular:
     self.hidup = True
     self.skor = 0
     self.arah = None
-    pilihan_kendali = [self._k_kibor, self._k_acak, self._k_lapar]
+    pilihan_kendali = [self._k_kibor, self._k_acak, self._k_lapar, self._k_nembok]
     self.kecerdasan = kecerdasan
     self.melata = pilihan_kendali[clip(kecerdasan, 0, len(pilihan_kendali)-1)]
     # if kecerdasan > 1:
@@ -182,7 +186,7 @@ class ular:
 
   def _k_acak(self, tombol = None):
     '''Dizzy snake.'''
-    self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
+    self._gerak(choice(arah))
 
   def _mangsa_terdekat(self):
     '''Determine location and distance of the closest prey.'''
@@ -206,22 +210,31 @@ class ular:
         if terdekat[1] < 0: self._gerak('kiri')
         else: self._gerak('kanan')
     else:
-      self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
+      self._gerak(choice(arah))
       self.mogok = False
 
   def _k_nembok(self, tombol = None):
     '''Enjoy the humid obstacles.'''
-    if not self.mogok:
-      (lokasi, terdekat) = self._mangsa_terdekat()
-      if abs(terdekat[0]) > abs(terdekat[1]):
-        if terdekat[0] < 0: self._gerak('atas')
-        else: self._gerak('bawah')
-      else:
-        if terdekat[1] < 0: self._gerak('kiri')
-        else: self._gerak('kanan')
-    else:
-      self._gerak(choice(['atas', 'bawah', 'kiri', 'kanan']))
-      self.mogok = False
+    # Determine priority directions
+    prioritas = []
+    (lokasi, terdekat) = self._mangsa_terdekat()
+    if terdekat[0] < 0: prioritas.append('atas')
+    else: prioritas.append('bawah')
+    if terdekat[1] < 0: prioritas.append('kiri')
+    else: prioritas.append('kanan')
+    # Determine free directions
+    bebas = []
+    [y, x] = self.kepala
+    opsi = [[y-1, x], [y+1, x], [y, x-1], [y, x+1]]
+    for i,titik in enumerate(opsi):
+      if not titik in field.isi_halangan: bebas.append(arah[i])
+    # Compare priority and free
+    pilihan = [p for p in prioritas if p in bebas]
+    if pilihan:
+      self._gerak(choice(pilihan))
+    elif bebas:
+      self._gerak(choice(bebas))
+    else: self._gerak(choice(arah))
 
   def _k_kelit(self, tombol = None):
     '''Quite smart snake avoid obstacles to the closest frog.'''

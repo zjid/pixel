@@ -1,18 +1,15 @@
-angka = [1, 2, 3]
 huruf = ['a', 'b', 'c']
-daftar = zip(angka, huruf)
-huruf.reverse()
-for kombinasi in daftar:
-  print(kombinasi)
+tes0 = ['d', 'a']
+tes1 = ['e', 'd']
 
-import numpy as np
-kumpulan = [
-  [-5,-5],
-  [-5, 5],
-  [5, -5],
-  [5, 5]
-]
-acuan = [1,2]
-kumpulan = np.array(kumpulan)
-acuan = np.array(acuan)
-print(kumpulan - acuan)
+hasil0 = any([True for h in tes0 if h in huruf])
+hasil1 = any([True for h in tes1 if h in huruf])
+
+print(hasil0)
+print(hasil1)
+
+print(any([]))
+
+angka = [1,2,3]
+sambung = list(zip(huruf, angka))
+# print(sambung[:,1])
