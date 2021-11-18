@@ -73,13 +73,12 @@ class kodok:
           break
       if not dapat:
         print('[W] Failed to put a new frog.')
-        # return 0
+        return
     self.id = self.__repr__().split('object at ')[-1].replace('>','')
     daftar_kodok.update({self.id: self})
     self.kelincahan = kelincahan
     self.nutrisi = kelincahan + 1
     self.warna = 200 - ones(3, uint8) * kelincahan * 10
-    # return 1
 
   def melompat(self):
     '''The frog jumps or not.'''
@@ -132,6 +131,7 @@ class ular:
     self.melata = pilihan_kendali[clip(kecerdasan, 0, len(pilihan_kendali)-1)]
     # if kecerdasan > 1:
     self.mogok = False
+    self.incaran = None
   
   def _catbadan(self):
     '''Bodypaint the snake neck, body, and tail.'''
@@ -222,7 +222,7 @@ class ular:
     else: prioritas.append('bawah')
     if terdekat[1] < 0: prioritas.append('kiri')
     else: prioritas.append('kanan')
-    # Determine free directions
+    # Detect free directions
     bebas = []
     [y, x] = self.kepala
     opsi = [[y-1, x], [y+1, x], [y, x-1], [y, x+1]]
@@ -238,12 +238,7 @@ class ular:
 
   def _k_kelit(self, tombol = None):
     '''Quite smart snake avoid obstacles to the closest frog.'''
-    # if field.isi_kodok and not self.mogok:
-    #   jarak_yx = array(field.isi_kodok) - array(self.kepala)
-    #   jarak_abs = abs(jarak_yx)
-    #   # jarak = [dy + dx ]
-    # else:
-    #   pass
+    # Am I in the same room with my food?
 
   def _diam(self, tombol = None): pass
 
